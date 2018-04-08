@@ -10,7 +10,7 @@ export default new Router({
             redirect: '/login'
         },
         {
-            path: '/readme',
+            path: '/home',
             component: resolve => require(['../components/common/Home.vue'], resolve),
             children:[
                 {
@@ -18,16 +18,16 @@ export default new Router({
                     component: resolve => require(['../components/page/Readme.vue'], resolve)
                 },
                 {
-                    path: '/basetable',
-                    component: resolve => require(['../components/page/BaseTable.vue'], resolve)
+                    path: '/joblist',
+                    component: resolve => require(['../components/page/JobList.vue'], resolve)
                 },
                 {
-                    path: '/vuetable',
-                    component: resolve => require(['../components/page/VueTable.vue'], resolve)     // vue-datasource组件
+                    path: '/addjob',
+                    component: resolve => require(['../components/page/AddJob.vue'], resolve)     // vue-datasource组件
                 },
                 {
-                    path: '/baseform',
-                    component: resolve => require(['../components/page/BaseForm.vue'], resolve)
+                    path: '/companyInfo',
+                    component: resolve => require(['../components/page/CompanyInfo.vue'], resolve)
                 },
                 {
                     path: '/vueeditor',

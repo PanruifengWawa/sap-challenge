@@ -3,8 +3,8 @@
         <div class="ms-title">后台管理系统</div>
         <div class="ms-login">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
-                <el-form-item prop="username">
-                    <el-input v-model="ruleForm.username" placeholder="username"></el-input>
+                <el-form-item prop="userName">
+                    <el-input v-model="ruleForm.userName" placeholder="userName"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
                     <el-input type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
@@ -23,7 +23,7 @@
         data: function(){
             return {
                 ruleForm: {
-                    username: '',
+                    userName: '',
                     password: ''
                 },
                 tips: "",
@@ -42,15 +42,40 @@
                 const self = this;
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
-                        localStorage.setItem('ms_username',self.ruleForm.username);
-                        self.tips = "aaa";
-                        console.log(self.tips);
-                        self.$router.push('/readme');
+                    	    self.login();
+//                      localStorage.setItem('ms_username',self.ruleForm.username);
+//                      self.tips = "aaa";
+//                      console.log(self.tips);
+//                      self.$router.push('/readme');
                     } else {
-                        console.log('error submit!!');
+                        tips = "请输入用户名密码";
                         return false;
                     }
                 });
+            },
+            login() {
+              	const self = this;
+            	    let formData = new FormData();
+            	    formData.append("userName",this.ruleForm.userName);
+            	    formData.append("password",this.ruleForm.password);
+            	    this.$axios.post(self.baseUrl + "/api/company/login",formData,{
+            	    	    headers: {
+            	    	    	    'Content-Type': 'multipart/form-data '
+            	    	    }
+            	    })
+            	    .then(function (response){
+            	    	    let status = response.data.status;
+            	    	    if (status != 0) {
+            	    	    	    self.tips = response.data.data;
+            	    	    } else {
+            	    	        localStorage.setItem('token',response.data.data);
+            	    	        localStorage.setItem('ms_username',self.ruleForm.userName);
+            	    	    	    self.$router.push('/home');
+            	    	    }
+            	    })
+            	    .catch(function (err){
+            	    	    self.tips = "服务器错误";
+            	    });
             }
         }
     }
