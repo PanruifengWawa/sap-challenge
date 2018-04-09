@@ -49,6 +49,21 @@
                                 title: '添加职位'
                             }
                         ]
+                    },
+                    {
+                        icon: 'el-icon-star-on',
+                        index: '3',
+                        title: '考试管理',
+                        subs: [
+                            {
+                                index: 'examlist',
+                                title: '考卷列表'
+                            },
+                            {
+                                index: 'addexam',
+                                title: '添加考卷'
+                            }
+                        ]
                     }
 //                  {
 //                      icon: 'el-icon-setting',

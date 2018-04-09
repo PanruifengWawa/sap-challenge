@@ -2,24 +2,29 @@
     <div class="table">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-menu"></i> 职位信息</el-breadcrumb-item>
-                <el-breadcrumb-item>职位列表</el-breadcrumb-item>
+                <el-breadcrumb-item><i class="el-icon-menu"></i> 考试管理</el-breadcrumb-item>
+                <el-breadcrumb-item>考卷列表</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="handle-box"> 
-            <el-input v-model="select_word" placeholder="筛选职位" class="handle-input mr10"></el-input>
+            <el-input v-model="select_word" placeholder="筛选考卷" class="handle-input mr10"></el-input>
         </div>
         <el-table :data="data" border style="width: 100%" ref="multipleTable">
          
-            <el-table-column prop="id" label="id" sortable width="150">
+            <el-table-column prop="id" label="id" sortable width="100">
             </el-table-column>
-            <el-table-column prop="position" label="职位" width="120">
+            <el-table-column prop="name" label="考卷名称" width="325">
             </el-table-column>
-            <el-table-column prop="description" label="职位描述" >
+            <el-table-column prop="jobPostion" label="适合职位" width="325">
             </el-table-column>
-            <el-table-column label="操作" width="180">
+            <el-table-column label="考卷内容" >
+            		<template scope="scope">
+					<el-button size="small"
+                            @click="handleEdit(scope.$index, scope.row)">查看</el-button>
+                </template>
+            </el-table-column>
+            <el-table-column label="操作" >
                 <template scope="scope">
-
                     <el-button size="small" type="danger"
                             @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                 </template>
@@ -38,6 +43,7 @@
 </template>
 
 <script>
+	import ExamDetails from './ExamDetails.vue';
     export default {
         data() {
             return {
@@ -45,7 +51,8 @@
                 cur_page: 1,
                 total: 1,
                 select_word: '',
-                page_size: 10
+                page_size: 10,
+                current_row_content: ''
             }
         },
         created(){
@@ -56,7 +63,7 @@
                 const self = this;
                 return self.tableData.filter(function(d){
                     if(
-                    	    (d.position.indexOf(self.select_word) > -1 )
+                    	    (d.name.indexOf(self.select_word) > -1 )
                     ){
                        return d;
                     }
@@ -70,7 +77,7 @@
             },
             getData(){
                 let self = this;
-                self.$axios.get(self.baseUrl + "/api/job?pageSize=" + self.page_size + 
+                self.$axios.get(self.baseUrl + "/api/exam?pageSize=" + self.page_size + 
                 "&pageIndex=" + self.cur_page,{
                 	    headers: {
             	    	    	    "token": localStorage.getItem('token')
@@ -87,7 +94,7 @@
             },
             deleteRow(id) {
             		let self = this;
-                self.$axios.delete(self.baseUrl + "/api/job/" + id ,{
+                self.$axios.delete(self.baseUrl + "/api/exam/" + id ,{
                 	    headers: {
             	    	    	    "token": localStorage.getItem('token')
             	    	    }
@@ -103,6 +110,19 @@
             },
             handleDelete(index, row) {
             		this.deleteRow(row["id"]);
+
+            },
+            handleEdit(index, row) {
+            		this.current_row_content = row['content'];
+            		this.$layer.iframe({
+  					content: {
+    						content: ExamDetails, //传递的组件对象
+    						parent: this,//当前的vue对象
+    						data: []//props
+  					},
+  					title: "考卷详情",
+  					area:['800px','600px']
+				});
 
             }
         }

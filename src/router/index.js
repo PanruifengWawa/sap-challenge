@@ -30,12 +30,12 @@ export default new Router({
                     component: resolve => require(['../components/page/CompanyInfo.vue'], resolve)
                 },
                 {
-                    path: '/vueeditor',
-                    component: resolve => require(['../components/page/VueEditor.vue'], resolve)    // Vue-Quill-Editor组件
+                    path: '/examlist',
+                    component: resolve => require(['../components/page/ExamList.vue'], resolve)    // Vue-Quill-Editor组件
                 },
                 {
-                    path: '/markdown',
-                    component: resolve => require(['../components/page/Markdown.vue'], resolve)     // Vue-Quill-Editor组件
+                    path: '/addexam',
+                    component: resolve => require(['../components/page/AddExam.vue'], resolve)     // Vue-Quill-Editor组件
                 },
                 {
                     path: '/upload',

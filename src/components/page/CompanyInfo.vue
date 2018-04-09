@@ -81,19 +81,19 @@
         methods: {
             onSubmit() {
             	    const self = this;
-            	    let formData = new FormData();
+            	    let data = '';
             	    for(let key in self.company) {
             	    	    if(self.company[key] != null && self.company[key] != '') {
-            	    	    	    formData.append(key, self.company[key]);
+            	    	    	    data += encodeURIComponent(key) + '=' + encodeURIComponent(self.company[key]) + '&'
             	    	    }
             	    }
-            		self.updateCompanyInfo(formData);
+            		self.updateCompanyInfo(data);
             },
             updateCompanyInfo(companyInfo) {
               	const self = this;
-            	    self.$axios.post(self.baseUrl + "/api/company",companyInfo,{
+            	    self.$axios.put(self.baseUrl + "/api/company",companyInfo,{
             	    	    headers: {
-//          	    	    	    'Content-Type': 'multipart/form-data ',
+            	    	    	    'Content-Type': 'application/x-www-form-urlencoded',
             	    	    	    "token": localStorage.getItem('token')
             	    	    }
             	    })

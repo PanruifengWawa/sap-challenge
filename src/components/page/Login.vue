@@ -60,7 +60,7 @@
             	    formData.append("password",this.ruleForm.password);
             	    this.$axios.post(self.baseUrl + "/api/company/login",formData,{
             	    	    headers: {
-            	    	    	    'Content-Type': 'multipart/form-data '
+            	    	    	    'Content-Type': 'multipart/form-data'
             	    	    }
             	    })
             	    .then(function (response){
