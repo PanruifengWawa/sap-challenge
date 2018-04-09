@@ -3,7 +3,7 @@
 [数据库分支](https://github.com/PanruifengWawa/sap-challenge/tree/database)
 
 ### E-R图
-![E-R](/images/e-r.png)
+![E-R](/images/er.png)
 
 ## R模型
 [R模型分支](https://github.com/PanruifengWawa/sap-challenge/tree/REngine)
@@ -21,4 +21,4 @@
 [后端分支](https://github.com/PanruifengWawa/sap-challenge/tree/back-end)
 
 ## 文档
-[文档地址](https://github.com/PanruifengWawa/sap-challenge/tree/back-end)
+[文档地址](http://www.panruifeng.com/doc/sap-job/)
