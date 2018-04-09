@@ -18,7 +18,7 @@ create table token(
     company_id bigint(20) unsigned not null,
     token_str varchar(64) not null unique,
     login_date date not null,
-    foreign key(company_id) references company(id)
+    foreign key(company_id) references company(id) on delete cascade
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 drop table if exists job;
@@ -27,15 +27,19 @@ create table job(
     position varchar(512) not null,
     company_id bigint(20) unsigned not null,
     description text,
-    foreign key(company_id) references company(id)
+    foreign key(company_id) references company(id) on delete cascade
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 drop table if exists examination;
 create table examination(
     id serial primary key,
+    name varchar(512) not null,
     content text not null,
     job_id bigint(20) unsigned not null,
-    foreign key(job_id) references job(id)
+    job_position varchar(512) not null,
+    company_id bigint(20) unsigned not null,
+    foreign key(company_id) references company(id) on delete cascade,
+    foreign key(job_id) references job(id) on delete cascade
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 drop table if exists job_seeker;
@@ -46,5 +50,14 @@ create table job_seeker(
     finished_date date,
     choice text,
     examination_id bigint(20) unsigned not null,
-    foreign key(examination_id) references examination(id)
+    company_id bigint(20) unsigned not null,
+    foreign key(company_id) references company(id) on delete cascade,
+    foreign key(examination_id) references examination(id) on delete cascade
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+INSERT INTO `job`.`company` (`id`, `user_name`, `password`, `name`) VALUES ('1', 'fourone', '53dfb97264f74a820d25a84f3909d1c8', '4+1队');
+INSERT INTO `job`.`company` (`id`, `user_name`, `password`, `name`) VALUES ('2', 'fourtwo', '53dfb97264f74a820d25a84f3909d1c8', '4+2队');
+
+
+
