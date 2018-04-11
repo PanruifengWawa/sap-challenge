@@ -45,10 +45,11 @@ create table examination(
 drop table if exists job_seeker;
 create table job_seeker(
     id serial primary key,
-    access_id varchar(32) unique not null,
+    access_id varchar(64) unique not null,
     score int not null default 0,
     finished_date date,
     choice text,
+    label varchar(300),
     examination_id bigint(20) unsigned not null,
     company_id bigint(20) unsigned not null,
     foreign key(company_id) references company(id) on delete cascade,
