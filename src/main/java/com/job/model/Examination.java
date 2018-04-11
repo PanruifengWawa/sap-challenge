@@ -12,9 +12,38 @@ import javax.persistence.Table;
 @Table(name = "examination")
 public class Examination {
 	private Long id;
+	private String name;
 	private String content;
 	private Long jobId;
+	private String jobPostion;
+	private Long companyId;
 	
+	
+	@Basic
+    @Column(name = "name")
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	@Basic
+    @Column(name = "job_position")
+	public String getJobPostion() {
+		return jobPostion;
+	}
+	public void setJobPostion(String jobPostion) {
+		this.jobPostion = jobPostion;
+	}
+	
+	@Basic
+    @Column(name = "company_id")
+	public Long getCompanyId() {
+		return companyId;
+	}
+	public void setCompanyId(Long companyId) {
+		this.companyId = companyId;
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")

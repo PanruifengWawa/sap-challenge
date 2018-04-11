@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -60,7 +61,7 @@ public class CompanyController {
 	* @apiName company_info
 	* @apiGroup company
 	*
-	* @apiHeader {String} token 身份凭证(商铺身份)
+	* @apiHeader {String} token 身份凭证
 	*
 	* @apiSuccessExample {json} Success-Response:
 	* 	HTTP/1.1 200 ok
@@ -90,13 +91,47 @@ public class CompanyController {
     	return companyService.getCompanyInfo((Long)request.getAttribute("companyId"));
     }
 	
+	/**
+	* @api {get} api/company/{companyId} 获取公司信息(手机端)
+	* @apiName company_info_id
+	* @apiGroup company
+	*
+	* @apiParam {Long} companyId * 公司id（必须）
+	*
+	* @apiSuccessExample {json} Success-Response:
+	* 	HTTP/1.1 200 ok
+	* 	{
+  	*		"data": {
+  	*			"name":"4+1公司",
+  	*			"phone":null,
+  	*			"address":null,
+  	*			"description":null
+  	*		},
+  	*		"status": 0
+	*	}
+	*
+	* @apiSuccessExample {json} Error-Response:
+	* 	HTTP/1.1 200 ok
+	* 	{
+	*  		"data": "错误",
+	*  		"status": 1
+	*	}
+	**/
+	@RequestMapping(value="{companyId}", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<CompanyView> getCompanyInfo(
+    		@PathVariable Long companyId
+    		) {
+    	return companyService.getCompanyInfo(companyId);
+    }
+	
 	
 	/**
-	* @api {get} api/company 获取公司信息(管理端)
+	* @api {put} api/company 更新公司信息(管理端)
 	* @apiName company_info
 	* @apiGroup company
 	*
-	* @apiHeader {String} token 身份凭证(商铺身份)
+	* @apiHeader {String} token 身份凭证
 	* 
 	* @apiParam {String} name * 公司名（非必须）
 	* @apiParam {String} phone * 公司电话（非必须）
@@ -118,7 +153,7 @@ public class CompanyController {
 	*	}
 	**/
 	@CheckLogin
-	@RequestMapping(value="", method = RequestMethod.POST)
+	@RequestMapping(value="", method = RequestMethod.PUT)
     @ResponseBody
     public DataWrapper<Void> updateCompanyInfo(
     		@ModelAttribute CompanyView companyView,

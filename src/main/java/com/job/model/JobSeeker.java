@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+
 @Entity
 @Table(name = "job_seeker")
 public class JobSeeker {
@@ -19,7 +20,26 @@ public class JobSeeker {
 	private Date finishedDate;
 	private String choice;
 	private Long examinationId;
+	private Long companyId;
+	private String label;
 	
+	
+	@Basic
+    @Column(name = "label")
+	public String getLabel() {
+		return label;
+	}
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	@Basic
+    @Column(name = "company_id")
+	public Long getCompanyId() {
+		return companyId;
+	}
+	public void setCompanyId(Long companyId) {
+		this.companyId = companyId;
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
