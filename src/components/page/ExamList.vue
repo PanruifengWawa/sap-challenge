@@ -15,6 +15,8 @@
             </el-table-column>
             <el-table-column prop="name" label="考卷名称" width="325">
             </el-table-column>
+            <el-table-column prop="score" label="满分" width="100">
+            </el-table-column>
             <el-table-column prop="jobPostion" label="适合职位" width="325">
             </el-table-column>
             <el-table-column label="考卷内容" >
@@ -65,7 +67,18 @@
                     if(
                     	    (d.name.indexOf(self.select_word) > -1 )
                     ){
-                       return d;
+                    		let questions = [];
+                   	 	let score = 0;
+        					try{
+        						questions = JSON.parse(d.content);
+        						for(let question of questions ) {	
+        							score += parseInt(question.score);
+        						}
+        						d["score"] = score;
+        					}catch(e){
+        						console.log(e);
+        					}
+                       	return d;
                     }
                 })
             }

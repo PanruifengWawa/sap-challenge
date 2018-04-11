@@ -10,6 +10,7 @@ import "babel-polyfill";
 
 
 Vue.use(ElementUI);
+Vue.use(require('vue-moment')); 
 Vue.prototype.$axios = axios;
 Vue.prototype.$layer = layer(Vue);
 Vue.prototype.baseUrl = "http://localhost:8081";

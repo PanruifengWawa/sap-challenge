@@ -18,7 +18,7 @@
             		</el-ul>-->
 				<div v-for="(exam,index) in exams">
 					<el-form-item label="题目:">
-						 {{exam.name}}
+						 {{exam.name}}({{exam.score}}分)
                 		</el-form-item>
 					<el-form-item label="选项:">
                     		<el-radio-group v-model="exam.right_choice" disabled>

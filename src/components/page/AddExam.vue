@@ -27,6 +27,9 @@
 					<el-form-item label="题目">
 						 <el-input v-model="exam.name"></el-input>
                 		</el-form-item>
+                		<el-form-item label="分数">
+						 <el-input type="number" v-model="exam.score"></el-input>
+                		</el-form-item>
 					<el-form-item label="选项:">
                     		<el-radio-group v-model="exam.right_choice">
                         		<el-radio class="handle-box" label="A">A. <el-input v-model="exam.choice.A"></el-input></el-radio><br>
@@ -98,6 +101,10 @@
             			} else {
             				exam.name = exam.name.trim();
             			}
+            			if(exam.score <= 0) {
+            				self.$message.info("分数要大于0");
+            				return;
+            			}
             			let all_choice = ["A", "B", "C", "D"];
             			for(let one of all_choice) {
             				if(exam.choice[one].trim() == "") {
@@ -149,7 +156,8 @@
             				"C": "",
             				"D": ""
             			},
-            			"right_choice": "A"
+            			"right_choice": "A",
+            			"score": 0
             		};
             		this.exams.push(exam);
             },

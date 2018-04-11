@@ -64,6 +64,21 @@
                                 title: '添加考卷'
                             }
                         ]
+                    },
+                    {
+                        icon: 'el-icon-star-on',
+                        index: '4',
+                        title: '应聘管理',
+                        subs: [
+                            {
+                                index: 'seekerlist',
+                                title: '应聘者列表'
+                            },
+                            {
+                                index: 'addseeker',
+                                title: '添加应聘者'
+                            }
+                        ]
                     }
 //                  {
 //                      icon: 'el-icon-setting',

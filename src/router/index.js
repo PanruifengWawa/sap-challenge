@@ -38,12 +38,12 @@ export default new Router({
                     component: resolve => require(['../components/page/AddExam.vue'], resolve)     // Vue-Quill-Editor组件
                 },
                 {
-                    path: '/upload',
-                    component: resolve => require(['../components/page/Upload.vue'], resolve)       // Vue-Core-Image-Upload组件
+                    path: '/seekerlist',
+                    component: resolve => require(['../components/page/SeekerList.vue'], resolve)       // Vue-Core-Image-Upload组件
                 },
                 {
-                    path: '/basecharts',
-                    component: resolve => require(['../components/page/BaseCharts.vue'], resolve)   // vue-schart组件
+                    path: '/addseeker',
+                    component: resolve => require(['../components/page/AddSeeker.vue'], resolve)   // vue-schart组件
                 },
                 {
                     path: '/drag',
