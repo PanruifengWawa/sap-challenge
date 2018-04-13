@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 
+
 def predict_post(request):
     para = ""
     response = {"result":"","status": 0}
