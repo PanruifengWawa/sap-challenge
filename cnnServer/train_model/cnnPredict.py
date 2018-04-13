@@ -68,5 +68,4 @@ class MyModel:
 
 if __name__ == "__main__":
     model = MyModel()
-    test = "撒大声地"
-    res = model.predict_model(test)
+    res = model.predict_model(sys.argv[1])
