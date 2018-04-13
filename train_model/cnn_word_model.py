@@ -1,12 +1,11 @@
-import sys
 from collections import Counter
-
-import numpy as np
 import tensorflow.contrib.keras as kr
 import keras
 from keras.models import Sequential, load_model
 from keras.layers import Dense, Dropout, Flatten,Embedding
 from keras.layers import Conv1D, MaxPooling1D
+import sys
+import numpy as np
 
 def open_file(filename, mode='r'):
     """
@@ -14,6 +13,7 @@ def open_file(filename, mode='r'):
     mode: 'r' or 'w' for read or write
     """
     return open(filename, mode, encoding='utf-8', errors='ignore')
+
 
 def read_file(filename):
     """读取文件数据"""
@@ -29,6 +29,7 @@ def read_file(filename):
                 pass
     return contents, labels
 
+
 def build_vocab(train_dir, vocab_dir, vocab_size=5000):
     """根据训练集构建词汇表，存储"""
     data_train, _ = read_file(train_dir)
@@ -43,17 +44,20 @@ def build_vocab(train_dir, vocab_dir, vocab_size=5000):
     words = ['<PAD>'] + list(words)
     open_file(vocab_dir, mode='w').write('\n'.join(words) + '\n')
 
+
 def read_vocab(vocab_dir):
     """读取词汇表"""
     words = open_file(vocab_dir).read().strip().split('\n')
     word_to_id = dict(zip(words, range(len(words))))
     return words, word_to_id
 
+
 def read_category():
     """读取分类目录，固定"""
     categories = ['AT', 'CI', 'PI', 'WE', 'NN']
     cat_to_id = dict(zip(categories, range(len(categories))))
     return categories, cat_to_id
+
 
 def to_words(content, words):
     """将id表示的内容转换为文字"""
@@ -71,6 +75,7 @@ def process_file(filename, word_to_id, cat_to_id, max_length=100):
     x_pad = kr.preprocessing.sequence.pad_sequences(data_id, max_length)
     y_pad = kr.utils.to_categorical(label_id, num_classes=len(cat_to_id))  # 将标签转换为one-hot表示
     return x_pad, y_pad
+
 
 def process_content(contents, word_to_id, max_length=100):
     """将文件转换为id表示"""
@@ -90,8 +95,8 @@ categories,cat_to_id = read_category()
 x_pad, y_pad = process_file(train_dir,word_to_id,cat_to_id)
 x_pad = x_pad.reshape(len(x_pad),100)
 y_pad = y_pad.reshape(len(y_pad),5)
-#建模
-#sequence_input = Input(shape=(5000,64), dtype='int32')
+# 建模
+# sequence_input = Input(shape=(5000,64), dtype='int32')
 model = Sequential()
 model.add(Embedding(5000,64,input_length = 100))
 model.add(Conv1D(128, 3, activation='relu',input_shape=(100,64)))
@@ -104,7 +109,9 @@ model.compile(loss='categorical_crossentropy',optimizer='rmsprop',metrics=['acc'
 model.fit(x_pad, y_pad, batch_size=20, epochs=50)
 model.save("model.h5")
 
-#test part
+# test part
+
+
 def open_file(filename, mode='r'):
     """
     常用文件操作
@@ -112,11 +119,13 @@ def open_file(filename, mode='r'):
     """
     return open(filename, mode, encoding='utf-8', errors='ignore')
 
+
 def read_vocab(vocab_dir):
     """读取词汇表"""
     words = open_file(vocab_dir).read().strip().split('\n')
     word_to_id = dict(zip(words, range(len(words))))
     return words, word_to_id
+
 
 def process_content(contents, word_to_id, max_length=100):
     """将文件转换为id表示"""
@@ -126,6 +135,8 @@ def process_content(contents, word_to_id, max_length=100):
     # 使用keras提供的pad_sequences来将文本pad为固定长度
     x_content = kr.preprocessing.sequence.pad_sequences(data_id, max_length)
     return x_content
+
+
 
 #载入模型
 model=load_model("model.h5")
