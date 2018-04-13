@@ -1,11 +1,9 @@
 from collections import Counter
 import tensorflow.contrib.keras as kr
-import keras
-from keras.models import Sequential, load_model
-from keras.layers import Dense, Dropout, Flatten,Embedding
+from keras.models import Sequential
+from keras.layers import Dense, Flatten,Embedding
 from keras.layers import Conv1D, MaxPooling1D
-import sys
-import numpy as np
+
 
 def open_file(filename, mode='r'):
     """
@@ -86,63 +84,27 @@ def process_content(contents, word_to_id, max_length=100):
     x_content = kr.preprocessing.sequence.pad_sequences(data_id, max_length)
     return x_content
 
-train_dir = "trainSet_GY.txt"
-vocab_dir = "cnews.vocab.txt"
-train_contents,train_label = read_file(train_dir)
-build_vocab(train_dir,vocab_dir)
-words,word_to_id = read_vocab(vocab_dir)
-categories,cat_to_id = read_category()
-x_pad, y_pad = process_file(train_dir,word_to_id,cat_to_id)
-x_pad = x_pad.reshape(len(x_pad),100)
-y_pad = y_pad.reshape(len(y_pad),5)
-# 建模
-# sequence_input = Input(shape=(5000,64), dtype='int32')
-model = Sequential()
-model.add(Embedding(5000,64,input_length = 100))
-model.add(Conv1D(128, 3, activation='relu',input_shape=(100,64)))
-model.add(MaxPooling1D(3))
-model.add(Flatten())
-model.add(Dense(128, activation='relu'))
-model.add(Dense(5, activation='softmax'))
+if __name__ == "__main__":
+    train_dir = "trainSet_GY.txt"
+    vocab_dir = "cnews.vocab.txt"
+    train_contents, train_label = read_file(train_dir)
+    build_vocab(train_dir, vocab_dir)
+    words, word_to_id = read_vocab(vocab_dir)
+    categories, cat_to_id = read_category()
+    x_pad, y_pad = process_file(train_dir, word_to_id, cat_to_id)
+    x_pad = x_pad.reshape(len(x_pad), 100)
+    y_pad = y_pad.reshape(len(y_pad), 5)
+    # modeling
+    # sequence_input = Input(shape=(5000,64), dtype='int32')
+    model = Sequential()
+    model.add(Embedding(5000, 64, input_length=100))
+    model.add(Conv1D(128, 3, activation='relu', input_shape=(100, 64)))
+    model.add(MaxPooling1D(3))
+    model.add(Flatten())
+    model.add(Dense(128, activation='relu'))
+    model.add(Dense(5, activation='softmax'))
 
-model.compile(loss='categorical_crossentropy',optimizer='rmsprop',metrics=['acc'])
-model.fit(x_pad, y_pad, batch_size=20, epochs=50)
-model.save("model.h5")
+    model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['acc'])
+    model.fit(x_pad, y_pad, batch_size=20, epochs=50)
+    model.save("model.h5")
 
-# test part
-
-
-def open_file(filename, mode='r'):
-    """
-    常用文件操作
-    mode: 'r' or 'w' for read or write
-    """
-    return open(filename, mode, encoding='utf-8', errors='ignore')
-
-
-def read_vocab(vocab_dir):
-    """读取词汇表"""
-    words = open_file(vocab_dir).read().strip().split('\n')
-    word_to_id = dict(zip(words, range(len(words))))
-    return words, word_to_id
-
-
-def process_content(contents, word_to_id, max_length=100):
-    """将文件转换为id表示"""
-    data_id = []
-    for i in range(len(contents)):
-        data_id.append([word_to_id[x] for x in contents[i] if x in word_to_id])
-    # 使用keras提供的pad_sequences来将文本pad为固定长度
-    x_content = kr.preprocessing.sequence.pad_sequences(data_id, max_length)
-    return x_content
-
-
-
-#载入模型
-model=load_model("model.h5")
-#读取词汇表并编号
-words, word_to_id = read_vocab("cnews.vocab.txt")
-#测试数据
-test = ["贵公司包食宿吗","公司在哪里"]
-testp = process_content(test,word_to_id)
-predicted = model.predict(testp)

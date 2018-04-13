@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from sap-challenge.train_model.cnnPredict import *
 
 
 def predict_post(request):
