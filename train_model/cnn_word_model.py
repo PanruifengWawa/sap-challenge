@@ -135,7 +135,3 @@ words, word_to_id = read_vocab("cnews.vocab.txt")
 test = ["贵公司包食宿吗","公司在哪里"]
 testp = process_content(test,word_to_id)
 predicted = model.predict(testp)
-
-
-
-
