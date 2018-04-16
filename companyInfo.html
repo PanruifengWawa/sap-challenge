@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<title>公司信息</title>
+	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="jquery-3.2.1.min.js"></script>
+	<script src="recoder.js"></script>
+	<script src="main.js"></script>
+ <style type="text/css">
+	#voice{
+		text-align:center;
+		display:inline;}
+	#btn-container{
+		text-align:center;
+	}
+</style>
+</head>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+  <ul class="nav navbar-nav navbar-left">
+		<li><a href="initial.html"><i class="glyphicon glyphicon-chevron-left"></i> </a></li>
+    </ul>
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">公司详情</a>
+    </div>
+  </div>
+</nav>
+<div class="container">
+	<div class="list-group">
+		<a href="#" class="list-group-item active">
+			<h4 class="list-group-item-heading">
+				公司名称
+			</h4>
+		</a>
+		<a href="#" class="list-group-item">
+			<h4 class="list-group-item-heading" id="companyName">
+				SAP
+			</h4>
+		</a>
+	</div>
+	<div class="list-group">
+		<a href="#" class="list-group-item active">
+			<h4 class="list-group-item-heading">
+				公司简介
+			</h4>
+		</a>
+		<a href="#" class="list-group-item">
+			<h4 class="list-group-item-heading" id="companyDescription">
+			为集团内企业提供投资经营决策；资金运作和财务管理；研究开发和技术支持；商品采购销售及市场营销服务；供应链管理等物流运作；承接本公司集团内部的共享服务及境外公司的服务外包、员工培训与管理服务；从事研究、设计、开发...
+			</h4>
+		</a>
+	</div>
+	<div class="list-group">
+		<a href="#" class="list-group-item active">
+			<h4 class="list-group-item-heading">
+				公司地址
+			</h4>
+		</a>
+		<a href="#" class="list-group-item">
+			<h4 class="list-group-item-heading" id="companyAddress">
+				上海市静安区南京西路1717号47楼01单位
+			</h4>
+		</a>
+	</div>
+    <div class="list-group">
+		<a href="#" class="list-group-item active">
+			<h4 class="list-group-item-heading" id="companyPhone">
+				联系方式
+			</h4>
+		</a>
+		<a href="#" class="list-group-item">
+			<h4 class="list-group-item-heading">
+				13112345678
+			</h4>
+		</a>
+	</div>
+    <div class="list-group">
+	<a href="#" class="list-group-item active">
+		<h4 class="list-group-item-heading">
+			职位介绍
+		</h4>
+	</a>
+	<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>职位名称</th>
+			<th>职位简介</th>
+		</tr>
+	</thead>
+	<tbody id="job-list">
+		<!-- <tr>
+			<td>算法设计岗</td>
+			<td>Rammohan </td>
+		</tr>
+		<tr>
+			<td>测试岗</td>
+			<td>Smita</td>
+		</tr>
+		<tr>
+			<td>产品经理</td>
+			<td>Rabindranath</td>
+		</tr> -->
+	</tbody>
+</table>
+</div>
+<div id="btn-container">
+	<button type="button" class="btn btn-primary popover-show" 
+			data-container="body" data-toggle="popover" 
+			data-content="长按按钮开始录音，松开按钮发送录音" id="record">语音输入
+	</button>
+</div>
+</div>
+<script type="text/javascript">
+	$(function () {
+		$(document).ready(function(){ 
+			//alert("刷新啦");
+			$.ajax({//获取公司信息
+        		type: "GET",
+     			url: "http://localhost:8081/api/company/",
+     			dataType: "json",
+     			async:false,
+     			data:{
+					"companyId": 123456
+       			},
+     			success: function(message){
+					var data = message.data;
+					$("#companyName").text(data.name);
+					$("#companyDescription").text(data.description);
+					$("#companyAddress").text(data.address);
+					$("#companyPhone").text(data.phone);
+     			},
+     			error: function(message){
+         
+     			}
+			}) 
+			$.ajax({//获取职位列表
+        		type: "GET",
+     			url: "http://localhost:8081/api/job/company/",
+     			dataType: "json",
+     			async:false,
+     			data:{
+					"companyId": 123456
+       			},
+     			success: function(message){
+					var data = message.data;
+					var job_str = "";
+					for (i in data) {  
+                        str += "<tr>" +  
+                        "<td>" + data[i].position + "</td>" +  
+                        "<td>" + data[i].description + "</td>"  +  
+                        "</tr>";  
+                    }  
+                    $("#job-list").innerHTML = job_str; 
+       
+     			},
+     			error: function(message){
+        
+     			}
+        	}) 
+		});
+
+		$("#record").click(function(){
+			$('.popover-show').popover('show');
+			setTimeout("hide()",3000);
+		}); 
+
+		$("#record").mousedown(function() {  
+			$("#record").text("开始录音");
+			startRecording();
+		});  
+   
+		$("#record").mouseup(function() {  
+			$("#record").text("发送语音");
+    		send();
+		}); 
+		
+		$("#record").mouseout(function() {   
+    		$("#record").text("语音输入");  
+		});  
+	});
+	function hide(){
+		$('.popover-show').popover('hide');
+	}
+</script>
+</body>
+</html>

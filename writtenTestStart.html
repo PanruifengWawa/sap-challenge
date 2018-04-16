@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<title>即将进入笔试...</title>
+	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	
+	
+	<script>
+	$("#start").click(function(){
+		window.location.href='writtenTest.html';  
+	});
+	// $(document).ready(function(){
+  	// 	$(".btn btn-default dropdown-toggle").dropdown();
+	// });
+	function selectOnchang(obj){ 
+var value = obj.options[obj.selectedIndex].value;
+}	
+</script>
+<style type="text/css">
+#start {
+	text-align:center;
+	display:inline;
+}
+	
+#start-container{
+	text-align:center;
+}
+
+.table-container{
+	margin:0 auto; /* 居中 这个是必须的，，其它的属性非必须 */ 
+	width:400px; /* 给个宽度 顶到浏览器的两边就看不出居中效果了 */ 
+	text-align:center; /* 文字等内容居中 */ 
+	vertical-align:middle;
+	border-collapse:separate;
+    border-spacing:10px;
+	height:200px;  
+    position:absolute;  
+    left:50%;  
+    top:50%;  
+    margin:-100px 0 0 -200px 
+}
+
+	</style>
+</head>
+
+<body>
+		<table class="table-container">
+				<tr>
+						<td width="20%"><label for="position">选择职位:</label></td>
+						<td width="40%">
+								
+										<select class="form-control" onchange="selectOnchang(this)">
+										<option value="all">所有申请商家</option>
+										<option value="check_pending">待审核商家</option>
+										<option value="no">未通过审核商家</option>
+										<option value="yes">已通过审核商家</option>
+										</select>
+						</td>
+				</tr>
+				<tr>
+						<td width="20%"><label for="testPassword" id="textTestPsw">密码:</label></td>
+						<td width="40%"><input type="password" class="form-control" id="testPsw" placeholder="请输入考试密码"></td>
+				</tr>
+				<tr>
+					<td colspan='2'>
+							<button type="button" class="btn btn-primary" id="start">进入考试</button>
+					</td>
+				</tr>
+		</table>
+<script type="text/javascript">
+$(function() { 
+	$("#start").click(function(){
+		window.location.href="writtenTest.html";
+		});       
+	}); 
+</script>	
+</body>
+</html>
