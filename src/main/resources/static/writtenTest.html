@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<title>在线笔试</title>
+	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style type="text/css">
+h3{
+	text-align: center;
+}
+h5{
+	text-align:center;
+}
+h4.list-group-item-heading {
+	display: inline;
+}
+div.bs-example{
+	display: inline;
+}
+div.btnContainer{
+	text-align: center;
+}
+	
+</style>
+</head>
+
+<body>
+<div class="container">
+<div class="page-header">
+    <h3>欢迎进入在线笔试</h3>
+    <h5>说明：本次笔试均为单选题，每题四个选项，请选择其一作为答案。</h5>
+    
+</div>
+<div id="toRender">
+
+<!-- <div class="list-group">
+	<a href="#" class="list-group-item">
+    	<h4 class="list-group-item-heading" id="title_number">(1)</h4>
+		<h4 class="list-group-item-heading" id="title_content">
+			我能很快跟别人建立融洽的关系。
+		</h4>
+ 		<div class="radio">
+		<label>
+			<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1"> A. 从不
+		</label>
+	</div>
+	<div class="radio">
+		<label>
+			<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">B. 有时
+		</label>
+    </div>
+    <div class="radio">
+		<label>
+			<input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">C. 经常
+		</label>
+	</div>
+	<div class="radio">
+		<label>
+			<input type="radio" name="optionsRadios" id="optionsRadios4" value="option4">D. 总是
+		</label>
+	</div>
+    </a>
+</div>
+<div class="list-group">
+	<a href="#" class="list-group-item">
+		<h4 class="list-group-item-heading" id="title_number">(1)</h4>
+		<h4 class="list-group-item-heading" id="title_content">
+			我能很快跟别人建立融洽的关系。
+		</h4>
+		<div class="radio">
+		<label>
+			<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1"> A. 从不
+		</label>
+	</div>
+	<div class="radio">
+		<label>
+			<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">B. 有时
+		</label>
+    </div>
+    <div class="radio">
+		<label>
+			<input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">C. 经常
+		</label>
+	</div>
+	<div class="radio">
+		<label>
+			<input type="radio" name="optionsRadios" id="optionsRadios4" value="option4">D. 总是
+		</label>
+	</div>
+	</a>
+</div> -->
+
+</div>
+<div data-toggle="buttons" class="btnContainer">
+	<div id="quit" class="bs-example">
+   	<button type="button" class="btn btn-primary">退出</button>
+	</div>
+	<div id="submit" class="bs-example">
+	<button type="button" class="btn btn-primary" >提交</button>
+	</div>
+</div>	
+
+</div>
+
+<script type="text/javascript">
+function getQueryStringByName(name){
+	 var result = location.search.match(new RegExp("[\?\&]" + name+ "=([^\&]+)","i"));
+	
+	 if(result == null || result.length < 1){
+		 return "";
+	 }
+	 return result[1];
+}
+function renderExam(data) {
+	
+	var content = "";
+	for(var i = 0 ; i < data.length; i++) {
+		console.log(data);
+		content += '<div class="list-group">' + 
+						'<a href="#" class="list-group-item">' + 
+							'<h4 class="list-group-item-heading" id="title_number">(' + ( i + 1) + ')</h4>' +
+							'<h4 class="list-group-item-heading" id="title_content">' + data[i].name + '</h4>' +
+							'<div class="radio">' + 
+								'<label>' +
+									'<input type="radio" name="' + data[i].uuid + '" value="A"> A. ' + data[i].choice.A + 
+								'</label>' + 
+							'</div>' +
+							'<div class="radio">' + 
+								'<label>' +
+									'<input type="radio" name="' + data[i].uuid + '" value="B"> B. ' + data[i].choice.B + 
+								'</label>' + 
+							'</div>' +
+							'<div class="radio">' + 
+								'<label>' +
+									'<input type="radio" name="' + data[i].uuid + '" value="C"> C. ' + data[i].choice.C + 
+								'</label>' + 
+							'</div>' +
+							'<div class="radio">' + 
+								'<label>' +
+									'<input type="radio" name="' + data[i].uuid + '" value="D"> D. ' + data[i].choice.D + 
+								'</label>' + 
+							'</div>' +
+						'</a>' +
+					'</div>';
+	}
+	$("#toRender")[0].innerHTML = content; 
+}
+
+$(function() { 
+	var code = getQueryStringByName("code");
+	var questions = [];
+	$(document).ready(function(){ 
+			//alert("刷新啦");
+			$.ajax({//获取公司信息
+        		type: "GET",
+     			url: "http://localhost:8081/api/seeker/accessId/" + code,
+     			dataType: "json",
+     			async:false,
+     			data:{},
+     			success: function(message){
+					var data = message.data;
+					if(message.status != 0) {
+						alert(data);
+					} else {
+						questions = JSON.parse(data); 
+						renderExam(questions);
+					}
+     			},
+     			error: function(message){
+         
+     			}
+			}) 
+       }) 
+
+	$("#submit .btn").click(function(){
+		var answers = {};
+          
+		for(let question of questions) {
+			var answer = $("input[name='" + question.uuid + "']:checked").val();
+			if(answer == undefined) {
+				alert("请完成考卷");
+				return;
+			}
+			answers[question.uuid] = answer;
+		}
+		$.ajax({//获取公司信息
+ 			url: "http://localhost:8081/api/seeker/accessId/" + code + "/finish",
+ 			type: 'POST',
+       		data: JSON.stringify(answers),
+       		processData: false,
+       		contentType: "application/json",
+ 			success: function(message){
+				if(message.status != 0) {
+					var data = message.data;
+					alert(data);
+				} else {
+					alert("提交完成");
+					window.location.href="/";
+				}
+ 			},
+ 			error: function(message){
+     
+ 			}
+		});
+	});    
+	$("#quit .btn").click(function(){
+		window.location.href="/";
+	});
+}); 
+	
+
+</script>
+</body>
+</html>
