@@ -33,8 +33,9 @@ div.btnContainer{
     <h5>说明：本次笔试均为单选题，每题四个选项，请选择其一作为答案。</h5>
     
 </div>
+<div id="toRender">
 
-<div class="list-group">
+<!-- <div class="list-group">
 	<a href="#" class="list-group-item">
     	<h4 class="list-group-item-heading" id="title_number">(1)</h4>
 		<h4 class="list-group-item-heading" id="title_content">
@@ -89,8 +90,9 @@ div.btnContainer{
 		</label>
 	</div>
 	</a>
-</div>
+</div> -->
 
+</div>
 <div data-toggle="buttons" class="btnContainer">
 	<div id="quit" class="bs-example">
    	<button type="button" class="btn btn-primary">退出</button>
@@ -103,15 +105,112 @@ div.btnContainer{
 </div>
 
 <script type="text/javascript">
+function getQueryStringByName(name){
+	 var result = location.search.match(new RegExp("[\?\&]" + name+ "=([^\&]+)","i"));
+	
+	 if(result == null || result.length < 1){
+		 return "";
+	 }
+	 return result[1];
+}
+function renderExam(data) {
+	
+	var content = "";
+	for(var i = 0 ; i < data.length; i++) {
+		console.log(data);
+		content += '<div class="list-group">' + 
+						'<a href="#" class="list-group-item">' + 
+							'<h4 class="list-group-item-heading" id="title_number">(' + ( i + 1) + ')</h4>' +
+							'<h4 class="list-group-item-heading" id="title_content">' + data[i].name + '</h4>' +
+							'<div class="radio">' + 
+								'<label>' +
+									'<input type="radio" name="' + data[i].uuid + '" value="A"> A. ' + data[i].choice.A + 
+								'</label>' + 
+							'</div>' +
+							'<div class="radio">' + 
+								'<label>' +
+									'<input type="radio" name="' + data[i].uuid + '" value="B"> B. ' + data[i].choice.B + 
+								'</label>' + 
+							'</div>' +
+							'<div class="radio">' + 
+								'<label>' +
+									'<input type="radio" name="' + data[i].uuid + '" value="C"> C. ' + data[i].choice.C + 
+								'</label>' + 
+							'</div>' +
+							'<div class="radio">' + 
+								'<label>' +
+									'<input type="radio" name="' + data[i].uuid + '" value="D"> D. ' + data[i].choice.D + 
+								'</label>' + 
+							'</div>' +
+						'</a>' +
+					'</div>';
+	}
+	$("#toRender")[0].innerHTML = content; 
+}
+
 $(function() { 
-	$("#quit .btn").click(function(){
-		window.location.href="initial.html";
-		}); 
+	var code = getQueryStringByName("code");
+	var questions = [];
+	$(document).ready(function(){ 
+			//alert("刷新啦");
+			$.ajax({//获取公司信息
+        		type: "GET",
+     			url: "http://localhost:8081/api/seeker/accessId/" + code,
+     			dataType: "json",
+     			async:false,
+     			data:{},
+     			success: function(message){
+					var data = message.data;
+					if(message.status != 0) {
+						alert(data);
+					} else {
+						questions = JSON.parse(data); 
+						renderExam(questions);
+					}
+     			},
+     			error: function(message){
+         
+     			}
+			}) 
+       }) 
+
 	$("#submit .btn").click(function(){
-		alert("答案已经成功提交！");
-		window.location.href="initial.html";
-		});        
-	}); 
+		var answers = {};
+          
+		for(let question of questions) {
+			var answer = $("input[name='" + question.uuid + "']:checked").val();
+			if(answer == undefined) {
+				alert("请完成考卷");
+				return;
+			}
+			answers[question.uuid] = answer;
+		}
+		$.ajax({//获取公司信息
+ 			url: "http://localhost:8081/api/seeker/accessId/" + code + "/finish",
+ 			type: 'POST',
+       		data: JSON.stringify(answers),
+       		processData: false,
+       		contentType: "application/json",
+ 			success: function(message){
+				if(message.status != 0) {
+					var data = message.data;
+					alert(data);
+				} else {
+					alert("提交完成");
+					window.location.href="/";
+				}
+ 			},
+ 			error: function(message){
+     
+ 			}
+		});
+	});    
+	$("#quit .btn").click(function(){
+		window.location.href="/";
+	});
+}); 
+	
+
 </script>
 </body>
 </html>

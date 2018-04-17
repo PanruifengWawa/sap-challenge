@@ -83,13 +83,62 @@ alert(x.data.result)
                      showError("请先录音");
                     return;
                }
-                msg[msgId]=data;
+//                msg[msgId]=data;
                 recorder.clear();
                 console.log(data);
-                var dur=data.duration/10;
-                 var str="<div class='warper'><div id="+msgId+" class='voiceItem'>"+dur+"s</div></div>"
-                $(".messages").append(str);
-                msgId++;
+                
+                
+                var formdata = new FormData();
+                formdata.append('data',data.blob);
+                console.log(formdata);
+                $.ajax({
+               		url: 'http://localhost:8081/api/voice/upload',
+               		type: 'POST',
+               		cache: false,
+               		data: formdata,
+               		processData: false,
+               		contentType: false
+                }).done(function(res) {
+                	console.log(res);
+                	var result = res.data;
+                	var content = "";
+                	console.log(company);
+                	switch(result) {
+                		case 'AT':
+                			content = "地址：" + company.address + "<br/>电话：" + company.phone;
+                			break;
+                		case 'CI':
+                			content = "公司介绍：" + company.description ;
+                			break;
+                		case 'PI':
+                			for (i in position) {  
+                				content += "<tr>" +  
+                                "<td>" + position[i].position + ":</td>" +  
+                                "<td>" + position[i].description + "</td>"  +  
+                                "</tr>";  
+                            }
+                			content = "<table>" + content + "</table>";
+                			break;
+                		case 'WE':
+                			content = "<a href='/startExam'>开始考试</a>"
+                			break;
+                		default:
+                			content = "未能识别";
+                	}
+                	layer.open({
+                		  type: 1,
+                		  title: false,
+                		  closeBtn: 0,
+                		  area: ['320px', '195px'],
+                		  shadeClose: true,
+                		  skin: 'yourclass',
+                		  content: content
+                		});
+                }).fail(function(res) {}); 
+//                var dur=data.duration/10;
+//                 var str="<div class='warper'><div id="+msgId+" class='voiceItem'>"+dur+"s</div></div>"
+//                $(".messages").append(str);
+//                msgId++;
             }
             
             $(document).on("click",".voiceItem",function(){

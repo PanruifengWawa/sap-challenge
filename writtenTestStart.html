@@ -8,10 +8,12 @@
 	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	
 	
-	
+<!-- 	
 	<script>
 	$("#start").click(function(){
-		window.location.href='writtenTest.html';  
+		var code = $('#code').val;
+		console.log(code);
+		//window.location.href='writtenTest.html';  
 	});
 	// $(document).ready(function(){
   	// 	$(".btn btn-default dropdown-toggle").dropdown();
@@ -19,7 +21,7 @@
 	function selectOnchang(obj){ 
 var value = obj.options[obj.selectedIndex].value;
 }	
-</script>
+</script> -->
 <style type="text/css">
 #start {
 	text-align:center;
@@ -49,7 +51,7 @@ var value = obj.options[obj.selectedIndex].value;
 
 <body>
 		<table class="table-container">
-				<tr>
+				<!-- <tr>
 						<td width="20%"><label for="position">选择职位:</label></td>
 						<td width="40%">
 								
@@ -60,10 +62,10 @@ var value = obj.options[obj.selectedIndex].value;
 										<option value="yes">已通过审核商家</option>
 										</select>
 						</td>
-				</tr>
+				</tr> -->
 				<tr>
 						<td width="20%"><label for="testPassword" id="textTestPsw">密码:</label></td>
-						<td width="40%"><input type="password" class="form-control" id="testPsw" placeholder="请输入考试密码"></td>
+						<td width="40%"><input type="text" class="form-control" id="code" placeholder="请输入考试密码"></td>
 				</tr>
 				<tr>
 					<td colspan='2'>
@@ -74,7 +76,9 @@ var value = obj.options[obj.selectedIndex].value;
 <script type="text/javascript">
 $(function() { 
 	$("#start").click(function(){
-		window.location.href="writtenTest.html";
+		var code = $('#code')[0].value;
+		console.log(code);
+		window.location.href="/exam?code=" + code;
 		});       
 	}); 
 </script>	
